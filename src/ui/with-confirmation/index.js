@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "ui/modal";
 import Button from "ui/button";
 
-export default function withConfirmation(Component) {
+const withConfirmation = (Component) => {
   return function WrappedComponent({
     renderMessage = () => {},
     onConfirm = () => {},
@@ -35,4 +35,5 @@ export default function withConfirmation(Component) {
       </div>
     );
   };
-}
+};
+export default withConfirmation;

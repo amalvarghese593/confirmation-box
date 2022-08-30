@@ -23,7 +23,7 @@ const ComboBoxAutocomplete = ({
   transformResponse,
   apiCallInfo,
   inputPlaceholder,
-  creatable,
+  creatable = (o) => o,
   options,
   components,
   onSelect,
@@ -149,12 +149,16 @@ const ComboBoxAutocomplete = ({
       e.stopPropagation();
     }
   };
+  const newOptionRef = useRef();
+  useEffect(() => {
+    if (newOptionRef.current) onCreateNewOption(newOptionRef.current);
+  }, [newOptionRef.current]);
 
   const handleCreateNewOption = () => {
     setQuery("");
     if (isSingleSelect) {
-      onCreateNewOption(query);
-      setSelectedItems(query);
+      setSelectedItems(query.trim());
+      onCreateNewOption(query.trim());
     } else {
       setSelectedItems((prev) => {
         let arr = [...prev];
@@ -162,17 +166,16 @@ const ComboBoxAutocomplete = ({
         const trueBlockFn = (value) => {
           if (!arr.includes(value) && value.length) {
             arr.push(creatable(value));
-            onCreateNewOption(creatable(value));
+            newOptionRef.current = creatable(value);
           }
         };
-        const falseBlockFn = (str) => {
+        const falseBlockFn = () => {
           if (!arr.includes(query)) {
             arr.push(creatable(query));
-            onCreateNewOption(creatable(query));
+            newOptionRef.current = creatable(query.trim());
           }
         };
         separateStringByComma(query, trueBlockFn, falseBlockFn);
-
         return arr;
       });
     }

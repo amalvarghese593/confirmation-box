@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ComboBoxAutocomplete from "./autosuggestion-search/ComboBoxAutocomplete";
@@ -6,6 +6,7 @@ import locations from "data/locations.json";
 import ConfirmationBox from "./ConfirmationBox";
 
 export const Form = () => {
+  const [data, setData] = useState("");
   const initialValues = {
     name: "",
     phone: "",
@@ -21,11 +22,11 @@ export const Form = () => {
   };
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
   const onApply = (data) => {
-    console.log({ data });
+    // console.log({ data });
     formik.setFieldValue("availabilityZones", data);
   };
   const onCreateNewOption = (val) => {
-    console.log({ val });
+    setData(val);
   };
   return (
     <div className="p-3">
